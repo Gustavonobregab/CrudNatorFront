@@ -11,8 +11,16 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        headerColors: {
+          1: "var(--crudNAtor-1)",
+          2: "var(--crudNAtor-2)",
+          3: "var(--crudNAtor-3)",
+          4: "var(--crudNAtor-4)",
+        }
       },
     },
   },
   plugins: [],
 } satisfies Config;
+
+

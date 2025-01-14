@@ -127,7 +127,7 @@ const PostList = () => {
     //     </div>
     //   ))}
     // </div>
-    <div className="flex flex-wrap justify-center items-start gap-10 p-5 flex-grow min-h-[calc(100vh-100px)]">
+    <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
 
       {posts.map((post) => (
         <div className="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-64 h-96 transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-lg" key={post._id}>

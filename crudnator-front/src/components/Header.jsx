@@ -55,21 +55,20 @@ const Navbar = () => {
   return (
     <header className="fixed top-0 left-0 h-screen w-16 bg-white shadow-md flex flex-col justify-center items-center p-4 z-10">
       <div className="grid gap-8">
-        {/* Ícone de usuário para login/logout*/}
-        {user ? profileDropdow : (
-        <button
-          onClick={() => router.push('/login')} 
-          className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100"> 
-          <FaUser className="text-lg" />
-        </button>
-      )}
-        
         {/* Ícone de home */}
         <button
           onClick={() => router.push('/')}
           className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100">
           <FaHome className="text-lg"/>
         </button>
+        {/* Ícone de usuário para login/logout*/}
+        {user ? profileDropdow : (
+          <button
+            onClick={() => router.push('/login')} 
+            className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100"> 
+            <FaUser className="text-lg" />
+          </button>
+        )}
         {/* Ícone de pesquisa */}
         <button
           onClick={() => router.push('/search')}

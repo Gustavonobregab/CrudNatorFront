@@ -1,6 +1,5 @@
 'use client'
 import React, {useState, useContext } from 'react';
-// import axios from 'axios';
 import { useRouter } from 'next/navigation'
 // import { BiSolidError } from "react-icons/bi";
 import { PostsContext } from '../contexts/PostsContext';
@@ -85,6 +84,15 @@ const PostList = () => {
   // const [loading, setLoading] = useState(true);
   // const [error, setError] = useState(null);
 
+  //Estado para captura de filtro
+  const [selectedFilters, setSelectedFilters] = useState([]);
+
+  //Função que lida com o filtro
+  const handleFilterClick = (filter) => {
+    // Lógica para atualizar o estado dos filtros selecionados
+    setSelectedFilters([...selectedFilters, filter]);
+  };
+
  
   const router = useRouter();
 
@@ -127,10 +135,25 @@ const PostList = () => {
     //     </div>
     //   ))}
     // </div>
-    <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
 
+    // barra de pesquisa
+        <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
+          <div className="flex border rounded-full p-2 shadow-lg">
+            <div className="px-2 cursor-pointer self-center text-slate-500 hover:text-slate-900" onClick={() => handleFilterClick('front-end')}>
+              Front-end
+            </div>
+            <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilterClick('back-end')}>
+              Back-end
+            </div>
+            <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilterClick('back-end')}>
+              Mobile
+            </div>
+          </div>
+
+      {/* Lista de posts */}
+      <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
       {posts.map((post) => (
-        <div className="relative flex flex-col my-6 bg-white shadow-sm border border-slate-200 rounded-lg w-64 h-96 transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-lg" key={post._id}>
+        <div className="relative flex flex-col my-6 bg-white shadow-md  rounded-lg w-64 h-96 transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-lg" key={post._id}>
           <div className="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
           <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="card-image" />
           </div>
@@ -150,6 +173,7 @@ const PostList = () => {
           </div>
         </div>
       ))}
+      </div>
     </div>
   );
 };

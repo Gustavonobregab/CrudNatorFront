@@ -1,5 +1,5 @@
 'use client'
-import {React, useContext} from 'react';
+import {React, useContext, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import { AuthContext } from '../contexts/AuthContext';
 import { FaUser, FaSearch, FaHome, FaPlus } from 'react-icons/fa';
@@ -8,6 +8,11 @@ import { Menu, MenuButton, MenuItem, MenuItems, Legend } from '@headlessui/react
 const Navbar = () => {
   const router = useRouter();
   const { user, logout } = useContext(AuthContext);
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
 
   const profileDropdow = ( 
     <Menu as="div" className="relative inline-block text-left">
@@ -70,11 +75,23 @@ const Navbar = () => {
           </button>
         )}
         {/* Ícone de pesquisa */}
-        <button
-          onClick={() => router.push('/search')}
-          className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100">
-          <FaSearch className="text-lg" />
-        </button>
+        <div>
+          <button onClick={toggleModal} className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100">
+            <FaSearch className="text-lg" />
+          </button>
+          {showModal && (
+            <div className="fixed left-14">
+              <div className="bg-white p-6 rounded-md shadow-md flex flex-col">
+                <input type="text" placeholder="Pesquisar" className="w-full self-center p-2" />
+                <button
+                    className="text-white bg-black hover:bg-slate-300 hover:text-black font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center m-3"
+                    onClick={toggleModal}>
+                    Search
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
         {/* Ícone de Criar post*/}
         <button
           onClick={() => router.push('/posts')}

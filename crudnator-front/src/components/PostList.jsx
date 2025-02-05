@@ -100,7 +100,7 @@ const PostList = () => {
   const router = useRouter();
 
    
-  // useEffect para puxar todos os posts do db
+  // useEffect para puxar todos os posts do db 
   useEffect(() => {
      api
        .get('/post')

@@ -99,7 +99,9 @@ const PostList = () => {
  
   const router = useRouter();
 
-   useEffect(() => {
+   
+  // useEffect para puxar todos os posts do db
+  useEffect(() => {
      api
        .get('/post')
        .then((response) => {
@@ -125,23 +127,10 @@ const PostList = () => {
    }
 
   return (
-    // <div className="flex flex-wrap justify-center items-start gap-10 p-5 flex-grow min-h-[calc(100vh-100px)]">
-    //   {posts.map((post) => (
-    //     <div
-    //       key={post._id}
-    //       className="bg-color-1 rounded-lg shadow-2xl w-70 p-5 transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-lg flex flex-col justify-between h-64 scale-105"
-    //       onClick={() => router.push(`/post/${post._id}`)}
-    //     >
-    //       <h2 className="text-lg font-bold mb-4 shrink-0">{post.title}</h2>
-    //       <p className="flex-grow text-center overflow-hidden text-ellipsis -webkit-box -webkit-line-clamp-3 -webkit-box-orient-vertical mb-4 text-sm">{post.content}</p>
-    //       <small className="text-center text-sm mt-auto">{post.area}</small>
-    //     </div>
-    //   ))}
-    // </div>
-
+  
     // barra de pesquisa
-        <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
-          <div className="flex border rounded-full p-2 shadow-lg">
+        <div className="flex flex-wrap flex-col npmjustify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
+          <div className="flex self-center border rounded-full p-2 shadow-lg">
             <div className="px-2 cursor-pointer self-center text-slate-500 hover:text-slate-900" onClick={() => handleFilterClick('front-end')}>
               Front-end
             </div>

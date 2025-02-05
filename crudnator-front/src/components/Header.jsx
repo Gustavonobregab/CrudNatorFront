@@ -99,7 +99,7 @@ const Navbar = () => {
           <FaPlus className="text-lg" />
         </button>
       </div>
-    </header>
+    </header> 
   );
 };
 

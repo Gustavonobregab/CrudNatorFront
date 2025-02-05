@@ -1,88 +1,91 @@
 'use client'
-import React, {useState, useContext } from 'react';
+import React, {useState, useContext, useEffect } from 'react';
 import { useRouter } from 'next/navigation'
-// import { BiSolidError } from "react-icons/bi";
 import { PostsContext } from '../contexts/PostsContext';
+import api from '../services/api';
 
-const posts = [
-  {
-    _id: '1',
-    title: 'Post 1',
-    content: 'Conteúdo do Post 1',
-    area: 'Frontend',
-  },
-  {
-    _id: '2',
-    title: 'Post 2',
-    content: 'Conteúdo do Post 2',
-    area: 'Backend',
-  },
-  {
-    _id: '3',
-    title: 'Post 3',
-    content: 'Conteúdo do Post 3',
-    area: 'Mobile',
-  },
-  {
-    _id: '4',
-    title: 'Post 4',
-    content: 'Conteúdo do Post 4',
-    area: 'DevOps',
-  },
-  {
-    _id: '5',
-    title: 'Post 5',
-    content: 'Conteúdo do Post 5',
-    area: 'UX/UI',
-  },
-  {
-    _id: '6',
-    title: 'Post 6',
-    content: 'Conteúdo do Post 6',
-    area: 'QA',
-  },
-  {
-    _id: '7',
-    title: 'Post 7',
-    content: 'Conteúdo do Post 7',
-    area: 'Frontend',
-  },
-  {
-    _id: '8',
-    title: 'Post 8',
-    content: 'Conteúdo do Post 8',
-    area: 'Backend',
-  },
-  {
-    _id: '9',
-    title: 'Post 9',
-    content: 'Conteúdo do Post 9',
-    area: 'Mobile',
-  },
-  {
-    _id: '10',
-    title: 'Post 10',
-    content: 'Conteúdo do Post 10',
-    area: 'DevOps',
-  },
-  {
-    _id: '11',
-    title: 'Post 11',
-    content: 'Conteúdo do Post 11',
-    area: 'UX/UI',
-  },
-  {
-    _id: '12',
-    title: 'Post 12',
-    content: 'Conteúdo do Post 12',
-    area: 'QA',
-  },
-];
+// const posts = [
+//   {
+//     _id: '1',
+//     title: 'Post 1',
+//     content: 'Conteúdo do Post 1',
+//     area: 'Frontend',
+//   },
+//   {
+//     _id: '2',
+//     title: 'Post 2',
+//     content: 'Conteúdo do Post 2',
+//     area: 'Backend',
+//   },
+//   {
+//     _id: '3',
+//     title: 'Post 3',
+//     content: 'Conteúdo do Post 3',
+//     area: 'Mobile',
+//   },
+//   {
+//     _id: '4',
+//     title: 'Post 4',
+//     content: 'Conteúdo do Post 4',
+//     area: 'DevOps',
+//   },
+//   {
+//     _id: '5',
+//     title: 'Post 5',
+//     content: 'Conteúdo do Post 5',
+//     area: 'UX/UI',
+//   },
+//   {
+//     _id: '6',
+//     title: 'Post 6',
+//     content: 'Conteúdo do Post 6',
+//     area: 'QA',
+//   },
+//   {
+//     _id: '7',
+//     title: 'Post 7',
+//     content: 'Conteúdo do Post 7',
+//     area: 'Frontend',
+//   },
+//   {
+//     _id: '8',
+//     title: 'Post 8',
+//     content: 'Conteúdo do Post 8',
+//     area: 'Backend',
+//   },
+//   {
+//     _id: '9',
+//     title: 'Post 9',
+//     content: 'Conteúdo do Post 9',
+//     area: 'Mobile',
+//   },
+//   {
+//     _id: '10',
+//     title: 'Post 10',
+//     content: 'Conteúdo do Post 10',
+//     area: 'DevOps',
+//   },
+//   {
+//     _id: '11',
+//     title: 'Post 11',
+//     content: 'Conteúdo do Post 11',
+//     area: 'UX/UI',
+//   },
+//   {
+//     _id: '12',
+//     title: 'Post 12',
+//     content: 'Conteúdo do Post 12',
+//     area: 'QA',
+//   },
+// ];
+
+let PageSize = 10;
 
 const PostList = () => {
-  // const { setPosts } = useContext(PostsContext);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
+  const { setPosts, posts } = useContext(PostsContext);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
 
   //Estado para captura de filtro
   const [selectedFilters, setSelectedFilters] = useState([]);
@@ -96,30 +99,30 @@ const PostList = () => {
  
   const router = useRouter();
 
-  // useEffect(() => {
-  //   axios
-  //     .get('/api/post')
-  //     .then((response) => {
-  //       setPosts(response.data.posts);
-  //       setLoading(false);
-  //     })
-  //     .catch(() => {
-  //       setError('Erro ao carregar os posts');
-  //       setLoading(false);
-  //     });
-  // }, []);
+   useEffect(() => {
+     api
+       .get('/post')
+       .then((response) => {
+          console.log(response.data);
+          setPosts(response.data.posts);
+          setLoading(false);
+       })
+       .catch(() => {
+         setError('Erro ao carregar os posts');
+         setLoading(false);
+       });
+   }, []);
 
-  // if (loading) {
-  //   return <div className="flex justify-center items-center h-screen text-gray-500 text-lg">Carregando...</div>;
-  // }
+   if (loading) {
+     return <div className="flex justify-center items-center h-screen text-gray-500 text-lg">Carregando...</div>;
+   }
 
-  // if (error) {
-  //   return (
-  //       <div className="flex justify-center flex-col items-center h-screen text-red-500 text-lg">
-  //           <BiSolidError />
-  //           {error}
-  //       </div>);
-  // }
+   if (error) {
+     return (
+         <div className="flex justify-center flex-col items-center h-screen text-red-500 text-lg">
+             {error}
+         </div>);
+   }
 
   return (
     // <div className="flex flex-wrap justify-center items-start gap-10 p-5 flex-grow min-h-[calc(100vh-100px)]">

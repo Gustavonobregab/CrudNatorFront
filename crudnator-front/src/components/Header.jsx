@@ -1,18 +1,17 @@
 'use client'
-import {React, useContext, useState} from 'react';
+import {React} from 'react';
 import { useRouter } from 'next/navigation';
-import { AuthContext } from '../contexts/AuthContext';
 import { FaUser, FaSearch, FaHome, FaPlus } from 'react-icons/fa';
 import { Menu, MenuButton, MenuItem, MenuItems, Legend } from '@headlessui/react';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleModal } from '../store/Slices/HeaderSlice';
 
 const Navbar = () => {
   const router = useRouter();
-  const { user, logout } = useContext(AuthContext);
-  const [showModal, setShowModal] = useState(false);
+  const { hasUser, user, modal} = useSelector((state) => state.header);
+  const dispatch = useDispatch();
 
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
+  const handlerModal = () => { dispatch(toggleModal()) };
 
   const profileDropdow = ( 
     <Menu as="div" className="relative inline-block text-left">
@@ -29,7 +28,7 @@ const Navbar = () => {
         <div className="py-1">
           <MenuItem>
             <Legend className="block px-4 py-2 text-sm text-gray-700">
-            Signed in as tom@example.com
+            Signed in as {user.name}
             </Legend>
           </MenuItem>
           <MenuItem>
@@ -44,7 +43,7 @@ const Navbar = () => {
             <MenuItem>
               <button
                 type="submit"
-                onClick={logout()}
+                // onClick={logout()}
                 className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
               >
                 Sign out
@@ -67,7 +66,7 @@ const Navbar = () => {
           <FaHome className="text-lg"/>
         </button>
         {/* Ícone de usuário para login/logout*/}
-        {user ? profileDropdow : (
+        {hasUser ? profileDropdow : (
           <button
             onClick={() => router.push('/login')} 
             className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100"> 
@@ -76,16 +75,16 @@ const Navbar = () => {
         )}
         {/* Ícone de pesquisa */}
         <div>
-          <button onClick={toggleModal} className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100">
+          <button onClick={() => handlerModal()} className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100">
             <FaSearch className="text-lg" />
           </button>
-          {showModal && (
+          {modal && (
             <div className="fixed left-14">
               <div className="bg-white p-6 rounded-md shadow-md flex flex-col">
                 <input type="text" placeholder="Pesquisar" className="w-full self-center p-2" />
                 <button
                     className="text-white bg-black hover:bg-slate-300 hover:text-black font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center m-3"
-                    onClick={toggleModal}>
+                    onClick={() => handlerModal()}>
                     Search
                 </button>
               </div>

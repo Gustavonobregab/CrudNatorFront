@@ -1,5 +1,5 @@
 import React from 'react';
-import { PostDetailsClient } from './PostDetailsClient';
+import PostDetailsClient from './PostDetailsClient';
 
 
 export default async function PostDetails() {

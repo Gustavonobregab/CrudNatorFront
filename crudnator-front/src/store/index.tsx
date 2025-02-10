@@ -6,11 +6,6 @@ export const store = configureStore({
     reducer: {
         header: headerReducer,
         posts: PostsReducer
-    },
-    middleware: (getDefaultMiddleware) => {
-        return getDefaultMiddleware({
-            serializableCheck: false,
-        });
     }
 });
 

@@ -10,7 +10,7 @@ interface Props {
 const AppProvider: React.FC<Props> = ({ children }: Props) => {
     return (
         <Provider store={store}>
-            {children}
+                {children}
         </Provider>);
 };
 

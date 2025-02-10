@@ -1,22 +1,47 @@
 'use client'
-import React, {useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
 import api from '../services/api';
 import { useSelector, useDispatch } from 'react-redux';
-import { setError, setLoading, setPosts, setSelectedFilter } from '../store/Slices/PostsSlice';
+import { setError, setLoading, setPosts, setPost } from '../store/Slices/PostsSlice';
 
 
 
-
-const PostList = () => {
+export function PostList () {
   const router = useRouter();
-  const {posts, error, loading  } = useSelector((state) => state.posts);
+  const [updatetPost, setUpdate] = useState([]);
+  const postsSelector = useSelector((state) => state.posts);
   const dispatch = useDispatch();
-
   const onError = (text) => dispatch(setError(text));
   const onLoading = (boolean) => dispatch(setLoading(boolean));
-  const onFilter = (filter) => dispatch(setSelectedFilter(filter));
   const onFetch = (posts) => dispatch(setPosts(posts));
+
+  const filterPosts = (filter) => {
+    const response = postsSelector.posts.filter((post) => post.area === filter);
+    setUpdate(response);
+  };
+  const handleFilter= (filter) => {
+    switch (filter) {
+      case 'Frontend':
+        filterPosts('Frontend')
+        console.log('Filtrando por Frontend');
+        break;
+      case 'Backend':
+        filterPosts('Backend')
+        console.log('Filtrando por Backend');
+        break;
+      case 'All':
+        setUpdate(postsSelector.posts)
+        console.log('Mostrando todos os itens');
+        break;
+      case 'UX':
+        filterPosts('UX')
+        console.log('Filtrando por UX');
+        break;
+      default:
+        console.log('Opção de filtro inválida');
+    }
+  }
 
 
  
@@ -27,6 +52,11 @@ const PostList = () => {
     }
     return text.substring(0, maxLength) + '...';
   };
+
+  const handlerOnClick = (post) => {
+    dispatch(setPost(post))
+    router.push(`/posts/${post._id}`)
+  }
 
    
   // useEffect para puxar todos os posts do db 
@@ -42,6 +72,7 @@ const PostList = () => {
                  author: post.author.toString()
              }));
              onFetch(postsWithConvertedIds);
+             setUpdate(postsWithConvertedIds)
              onLoading(false);
          } catch (err) { 
              console.error("Erro ao carregar posts:", err);
@@ -53,7 +84,7 @@ const PostList = () => {
      fetchPosts(); // Chama a função assíncrona
 }, []);
 
-    if (loading) {
+    if (postsSelector.loading) {
       return (
        <div role="status">
            <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-black" viewBox="0 0 100 101" fill="none" xmlns="http:www.w3.org/2000/svg">
@@ -63,10 +94,10 @@ const PostList = () => {
        </div>
       )};
 
-    if (error) {
+    if (postsSelector.error) {
       return (
           <div className="flex justify-center flex-col items-center h-screen text-red-500 text-lg">
-              {error}
+              {postsSelector.error}
           </div>);
     }
 
@@ -75,20 +106,23 @@ const PostList = () => {
     // barra de pesquisa
         <div className="flex flex-wrap flex-col npmjustify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
           <div className="flex self-center border rounded-full p-2 shadow-lg">
-            <div className="px-2 cursor-pointer self-center text-slate-500 hover:text-slate-900" onClick={() => onFilter('front-end')}>
+            <div className="px-2 cursor-pointer self-center text-slate-500 hover:text-slate-900" onClick={() => handleFilter('All')}>
+              All
+            </div>
+            <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Frontend')}>
               Front-end
             </div>
-            <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => onFilter('back-end')}>
+            <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Backend')}>
               Back-end
             </div>
-            <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => onFilter('back-end')}>
-              Mobile
+            <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('UX')}>
+              UX
             </div>
           </div>
 
       {/* Lista de posts */}
       <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
-      {posts.map((post) => (
+      {updatetPost.map((post) => (
         <div className="relative flex flex-col my-6 bg-white shadow-md  rounded-lg w-64 h-96 transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-lg" key={post._id}>
           <div className="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
           <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="card-image" />
@@ -103,7 +137,7 @@ const PostList = () => {
             </p>
           </div>
           <div className="px-4 pb-4 pt-0 mt-2">
-            <button className="rounded-md bg-black py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-white hover:text-black active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button" onClick={() => router.push(`/posts/${post._id}`)}>
+            <button className="rounded-md bg-black py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-white hover:text-black active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button" onClick={() => handlerOnClick(post)}>
               Read more
             </button>
           </div>

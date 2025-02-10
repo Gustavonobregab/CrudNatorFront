@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
 import api from '../services/api';
 import { useSelector, useDispatch } from 'react-redux';
-import { setError, setLoading, setPosts, setPost } from '../store/Slices/PostsSlice';
+import { setError, setLoading, setPosts, setPost, setPage, setTotalPages } from '../store/Slices/PostsSlice';
 
 
 
@@ -15,11 +15,16 @@ export function PostList () {
   const onError = (text) => dispatch(setError(text));
   const onLoading = (boolean) => dispatch(setLoading(boolean));
   const onFetch = (posts) => dispatch(setPosts(posts));
+  
+  const [currentPage, setCurrentPage] = useState(1); // Estado para a página atual
+  const [loadingMore, setLoadingMore] = useState(false); // Estado para controlar o carregamento adicional`
+
 
   const filterPosts = (filter) => {
     const response = postsSelector.posts.filter((post) => post.area === filter);
     setUpdate(response);
   };
+
   const handleFilter= (filter) => {
     switch (filter) {
       case 'Frontend':
@@ -43,9 +48,6 @@ export function PostList () {
     }
   }
 
-
- 
-
   const limitText = (text, maxLength) => {
     if (text.length <= maxLength) {
       return text;
@@ -56,33 +58,74 @@ export function PostList () {
   const handlerOnClick = (post) => {
     dispatch(setPost(post))
     router.push(`/posts/${post._id}`)
-  }
+  };
 
-   
+  const fetchPosts = async (page = 1, totalPages) => {
+    try {
+      onLoading(true);
+      setLoadingMore(true);
+
+      const response = await api.get('/post', { params: { page, limit: totalPages } });
+
+      const postsWithConvertedIds = response.data.posts.map((post) => ({
+        ...post,
+        _id: post._id.toString(),
+        author: post.author.toString()
+    }));
+      if (page === 1) { // Se for a primeira página, substitui os posts existentes
+          onFetch(postsWithConvertedIds);
+          setUpdate(postsWithConvertedIds);
+      } else { // Se for uma página adicional, adiciona aos posts existentes
+          onFetch([...postsSelector.posts, ...postsWithConvertedIds]);
+          setUpdate([...updatetPost, ...postsWithConvertedIds]);
+      }
+
+      console.log(response.data);
+      onLoading(false);
+      setLoadingMore(false); // Define loadingMore como false após o carregamento
+      dispatch(setTotalPages(response.data.totalPages));
+      dispatch(setPage(response.data.page));
+      setCurrentPage(page); // Atualiza a página atual
+
+    } catch (err) {
+        console.error("Erro ao carregar posts:", err);
+        onError('Erro ao carregar os posts. Tente novamente mais tarde.');
+        onLoading(false);
+        setLoadingMore(false); // Define loadingMore como false em caso de erro
+    }
+  };
+
   // useEffect para puxar todos os posts do db 
    useEffect(() => {
-     const fetchPosts = async () => {
-         try {
-             onLoading(true)
-             const response = await api.get('/post');
+    //  const fetchPosts = async () => {
+    //      try {
+    //          onLoading(true)
+    //          const response = await api.get('/post');
 
-             const postsWithConvertedIds = response.data.posts.map((post) => ({
-                 ...post,
-                 _id: post._id.toString(),
-                 author: post.author.toString()
-             }));
-             onFetch(postsWithConvertedIds);
-             setUpdate(postsWithConvertedIds)
-             onLoading(false);
-         } catch (err) { 
-             console.error("Erro ao carregar posts:", err);
-             onError('Erro ao carregar os posts. Tente novamente mais tarde.');
-             onLoading(false);
-         }
-     };
-
+    //          const postsWithConvertedIds = response.data.posts.map((post) => ({
+    //              ...post,
+    //              _id: post._id.toString(),
+    //              author: post.author.toString()
+    //          }));
+    //          console.log(response.data);
+             
+    //          onFetch(postsWithConvertedIds);
+    //          setUpdate(postsWithConvertedIds)
+    //          onLoading(false);
+    //          dispatch(setTotalPages(response.data.totalPages)),
+    //          dispatch(setPage(response.data.page))
+    //      } catch (err) { 
+    //          console.error("Erro ao carregar posts:", err);
+    //          onError('Erro ao carregar os posts. Tente novamente mais tarde.');
+    //          onLoading(false);
+    //      }
+    //  };
      fetchPosts(); // Chama a função assíncrona
 }, []);
+
+  const handleLoadMore = () => {
+    fetchPosts(currentPage + 1);
+  };
 
     if (postsSelector.loading) {
       return (
@@ -144,6 +187,16 @@ export function PostList () {
         </div>
       ))}
       </div>
+      <div>
+            <button
+                className="rounded-md bg-black py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-white hover:text-black active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button"
+                onClick={handleLoadMore}
+                disabled={loadingMore || currentPage >= postsSelector.totalPages} // Desabilita o botão durante o carregamento ou se não houver mais páginas
+            >
+                {loadingMore ? "Carregando..." : "More Posts..."} {/* Texto do botão condicional */}
+            </button>
+        </div>
     </div>
   );
 };

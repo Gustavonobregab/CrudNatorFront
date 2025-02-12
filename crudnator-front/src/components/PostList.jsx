@@ -147,57 +147,56 @@ export function PostList () {
   return (
   
     // barra de pesquisa
-        <div className="flex flex-wrap flex-col npmjustify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
-          <div className="flex self-center border rounded-full p-2 shadow-lg">
-            <div className="px-2 cursor-pointer self-center text-slate-500 hover:text-slate-900" onClick={() => handleFilter('All')}>
-              All
+        <div className="flex flex-wrap flex-col justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
+            <div className="flex self-center border rounded-full p-2 shadow-lg">
+              <div className="px-2 cursor-pointer self-center text-slate-500 hover:text-slate-900" onClick={() => handleFilter('All')}>
+                All
+              </div>
+              <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Frontend')}>
+                Front-end
+              </div>
+              <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Backend')}>
+                Back-end
+              </div>
+              <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('UX')}>
+                UX
+              </div>
             </div>
-            <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Frontend')}>
-              Front-end
+            {/* Lista de posts */}
+            <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
+            {updatetPost.map((post) => (
+              <div className="relative flex flex-col my-6 bg-white shadow-md  rounded-lg w-64 h-96 transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-lg" key={post._id}>
+                <div className="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
+                <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="card-image" />
+                </div>
+                <div className="p-4">
+                  <h2 className="mb-2 text-slate-800 text-xl font-semibold">
+                    {post.title}
+                  </h2>
+                  <h6 className='h6'>{post.area}</h6>
+                  <p className="text-slate-500 leading-normal font-light">
+                    {limitText(post.content, 50)}
+                  </p>
+                </div>
+                <div className="px-4 pb-4 pt-0 mt-2">
+                  <button className="rounded-md bg-black py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-white hover:text-black active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button" onClick={() => handlerOnClick(post)}>
+                    Read more
+                  </button>
+                </div>
+              </div>
+            ))}
             </div>
-            <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Backend')}>
-              Back-end
+            <div className='flex self-center'>
+                  <button
+                      className="rounded-md bg-black py-2 px-4 border self-center border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-white hover:text-black active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                      type="button"
+                      onClick={handleLoadMore}
+                      disabled={loadingMore || currentPage >= postsSelector.totalPages} // Desabilita o botão durante o carregamento ou se não houver mais páginas
+                  >
+                      {loadingMore ? "Carregando..." : "More Posts..."} {/* Texto do botão condicional */}
+                  </button>
             </div>
-            <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('UX')}>
-              UX
-            </div>
-          </div>
-
-      {/* Lista de posts */}
-      <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
-      {updatetPost.map((post) => (
-        <div className="relative flex flex-col my-6 bg-white shadow-md  rounded-lg w-64 h-96 transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-lg" key={post._id}>
-          <div className="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
-          <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="card-image" />
-          </div>
-          <div className="p-4">
-            <h2 className="mb-2 text-slate-800 text-xl font-semibold">
-              {post.title}
-            </h2>
-            <h6 className='h6'>{post.area}</h6>
-            <p className="text-slate-500 leading-normal font-light">
-              {limitText(post.content, 50)}
-            </p>
-          </div>
-          <div className="px-4 pb-4 pt-0 mt-2">
-            <button className="rounded-md bg-black py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-white hover:text-black active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button" onClick={() => handlerOnClick(post)}>
-              Read more
-            </button>
-          </div>
         </div>
-      ))}
-      </div>
-      <div>
-            <button
-                className="rounded-md bg-black py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-white hover:text-black active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                type="button"
-                onClick={handleLoadMore}
-                disabled={loadingMore || currentPage >= postsSelector.totalPages} // Desabilita o botão durante o carregamento ou se não houver mais páginas
-            >
-                {loadingMore ? "Carregando..." : "More Posts..."} {/* Texto do botão condicional */}
-            </button>
-        </div>
-    </div>
   );
 };
 

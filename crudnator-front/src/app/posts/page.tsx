@@ -1,7 +1,24 @@
-import { ChevronDownIcon } from '@heroicons/react/16/solid'
+import { ChevronDownIcon } from '@heroicons/react/16/solid';
+import { useState } from 'react';
 
 
 export default function Posts() {
+  const [author, setAuthor] = useState('');
+  const [title, setTitle] = useState('');
+  const [postLink, setpostLink] = useState('');
+  const [area, setArea] = useState('');
+  const [content, setContent] = useState('');
+
+  const handleSubmit = () => {
+    const data = {
+      author,
+      title,
+      postLink,
+      area,
+      content,
+    };
+    
+  };
     return (
       <div className="flex flex-wrap justify-center gap-10 p-5 flex-grow min-h-[calc(100vh-100px)]">
        <main className="container mx-auto">
@@ -30,6 +47,8 @@ export default function Posts() {
                         type="text"
                         placeholder="Author Name"
                         className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                        onChange={(e) => setAuthor(e.target.value)}
+                        value={author}
                       />
                     </div>
                   </div>
@@ -47,6 +66,8 @@ export default function Posts() {
                         type="text"
                         placeholder="Post title"
                         className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                        onChange={(e) => setTitle(e.target.value)}
+                        value={title}
                       />
                     </div>
                   </div>
@@ -65,6 +86,8 @@ export default function Posts() {
                         type="text"
                         placeholder="postLink"
                         className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                        onChange={(e) => setpostLink(e.target.value)}
+                        value={postLink}
                       />
                     </div>
                   </div>
@@ -80,6 +103,8 @@ export default function Posts() {
                       name="Area"
                       autoComplete="Area-name"
                       className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      onChange={(e) => setArea(e.target.value)}
+                      value={area}
                     >
                       <option>Frontend</option>
                       <option>Backend</option>
@@ -107,6 +132,8 @@ export default function Posts() {
                       rows={3}
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                       defaultValue={''}
+                      onChange={(e) => setContent(e.target.value)}
+                      value={content}
                     />
                   </div>
                   <p className="mt-3 text-sm/6 text-gray-600">Write a few sentences about the project.</p>
@@ -122,6 +149,7 @@ export default function Posts() {
             </button>
             <button
               className="text-white bg-black hover:bg-slate-300 hover:text-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              onClick={handleSubmit}
             >
               Save
             </button>

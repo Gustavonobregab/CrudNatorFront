@@ -73,7 +73,7 @@ const Navbar = () => {
             <FaUser className="text-lg" />
           </button>
         )}
-        {/* Ícone de pesquisa */}
+        {/* Ícone de pesquisa 
         <div>
           <button onClick={() => handlerModal()} className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100">
             <FaSearch className="text-lg" />
@@ -90,7 +90,7 @@ const Navbar = () => {
               </div>
             </div>
           )}
-        </div>
+        </div>*/}
         {/* Ícone de Criar post*/}
         <button
           onClick={() => router.push('/posts')}

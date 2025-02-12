@@ -6,9 +6,9 @@ export default function Home() {
       <main className="container mx-auto">
         <section className="flex flex-col place-items-center">
           <div className="flex flex-col items-center relative">
-            <h1 className=" text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-extrabold leading-none drop-shadow-md tracking-tight text-black mb-3 sm:pb-6 md:pb-4 lg:top-0 lg:pb-2">Welcome to</h1>
-            <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl absolute font-bold -bottom-1 sm:-bottom-1 md:-bottom-7 lg:-bottom-12 ">
-              <span className="text-headerColors-1">C</span>
+          <h1 className="text-5xl sm:text-7xl md:text-9xl lg:text-[10rem] font-extrabold leading-none  drop-shadow-2xl shadow-black tracking-[-0.05em] text-black mb-3 sm:pb-6 md:pb-4 lg:top-0 lg:pb-2">Welcome to</h1>
+          <h1 className="text-5xl sm:text-7xl md:text-9xl lg:text-[10rem] absolute font-bold -bottom-1 sm:-bottom-1 md:-bottom-7 lg:-bottom-12 tracking-[-0.05em]">
+          <span className="text-headerColors-1">C</span>
               <span className="text-headerColors-2">r</span>
               <span className="text-headerColors-3">u</span>
               <span className="text-headerColors-4">d</span>
@@ -19,7 +19,7 @@ export default function Home() {
               <span className="text-headerColors-1">r</span>
             </h1>
           </div>
-          <p className="text-sm font-bold sm:text-lg mb:text-md lg:text-black mb-4 pt-10 self-center"> Collaboration needs to be simple</p>
+          <p className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold lg:text-black mb-4 pt-10 self-center">Collaboration needs to be simple</p>
         </section>
       </main>
       <PostList />

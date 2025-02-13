@@ -9,56 +9,15 @@ import { setError, setLoading, setPosts, setPost, setPage, setTotalPages } from 
 
 export function PostList () {
   const router = useRouter();
-  const [updatetPost, setUpdate] = useState([]);
   const postsSelector = useSelector((state) => state.posts);
   const dispatch = useDispatch();
   const onError = (text) => dispatch(setError(text));
   const onLoading = (boolean) => dispatch(setLoading(boolean));
   const onFetch = (posts) => dispatch(setPosts(posts));
   
+  const [updatetPost, setUpdate] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // Estado para a página atual
   const [loadingMore, setLoadingMore] = useState(false); // Estado para controlar o carregamento adicional`
-
-
-  const filterPosts = (filter) => {
-    const response = postsSelector.posts.filter((post) => post.area === filter);
-    setUpdate(response);
-  };
-
-  const handleFilter= (filter) => {
-    switch (filter) {
-      case 'Frontend':
-        filterPosts('Frontend')
-        console.log('Filtrando por Frontend');
-        break;
-      case 'Backend':
-        filterPosts('Backend')
-        console.log('Filtrando por Backend');
-        break;
-      case 'All':
-        setUpdate(postsSelector.posts)
-        console.log('Mostrando todos os itens');
-        break;
-      case 'UX':
-        filterPosts('UX')
-        console.log('Filtrando por UX');
-        break;
-      default:
-        console.log('Opção de filtro inválida');
-    }
-  }
-
-  const limitText = (text, maxLength) => {
-    if (text.length <= maxLength) {
-      return text;
-    }
-    return text.substring(0, maxLength) + '...';
-  };
-
-  const handlerOnClick = (post) => {
-    dispatch(setPost(post))
-    router.push(`/posts/${post._id}`)
-  };
 
   const fetchPosts = async (page = 1, totalPages) => {
     try {
@@ -79,8 +38,6 @@ export function PostList () {
           onFetch([...postsSelector.posts, ...postsWithConvertedIds]);
           setUpdate([...updatetPost, ...postsWithConvertedIds]);
       }
-
-      console.log(response.data);
       onLoading(false);
       setLoadingMore(false); // Define loadingMore como false após o carregamento
       dispatch(setTotalPages(response.data.totalPages));
@@ -93,6 +50,58 @@ export function PostList () {
         onLoading(false);
         setLoadingMore(false); // Define loadingMore como false em caso de erro
     }
+  };
+
+  const filterPosts = async (filter) => {
+    try{
+      onLoading(true);
+      setLoadingMore(true);
+
+      const response = await api.get(`/post/filter/${filter}`);
+      
+      if (response.length === 0) {
+      onError('Nenhum post encontrado com esse filtro.');
+      }
+      setUpdate(response.data.filteredPosts);
+      onLoading(false);
+    } catch (err) {
+      onError('Erro ao filtrar os posts. Tente novamente mais tarde.');
+    }
+  };
+
+  const handleFilter = async (filter) => {
+    switch (filter) {
+      case 'Frontend':
+         await filterPosts('Frontend')
+        console.log('Filtrando por Frontend');
+        break;
+      case 'Backend':
+        await filterPosts('Backend')
+        console.log('Filtrando por Backend');
+        break;
+      case 'All':
+        setUpdate(postsSelector.posts)
+        console.log('Mostrando todos os itens');
+        break;
+      case 'UX':
+        await filterPosts('UX')
+        console.log('Filtrando por UX');
+        break;
+      default:
+        console.log('Opção de filtro inválida');
+    }
+  }
+
+  const limitText = (text, maxLength) => {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.substring(0, maxLength) + '...';
+  };
+
+  const handlerOnClick = (post) => {
+    dispatch(setPost(post))
+    router.push(`/posts/${post._id}`)
   };
 
   // useEffect para puxar todos os posts do db 
@@ -158,8 +167,8 @@ export function PostList () {
               <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Backend')}>
                 Back-end
               </div>
-              <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('UX')}>
-                UX
+              <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Uxui')}>
+                UX/UI
               </div>
             </div>
             {/* Lista de posts */}
@@ -193,7 +202,7 @@ export function PostList () {
                       onClick={handleLoadMore}
                       disabled={loadingMore || currentPage >= postsSelector.totalPages} // Desabilita o botão durante o carregamento ou se não houver mais páginas
                   >
-                      {loadingMore ? "Carregando..." : "More Posts..."} {/* Texto do botão condicional */}
+                      {loadingMore ? "No more Posts!" : "More Posts..."} {/* Texto do botão condicional */}
                   </button>
             </div>
         </div>

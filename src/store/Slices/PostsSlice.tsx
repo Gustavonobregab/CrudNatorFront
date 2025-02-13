@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { set } from 'mongoose';
 
 interface Post {
     id: number;

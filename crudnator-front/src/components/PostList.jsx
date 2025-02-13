@@ -165,9 +165,9 @@ export function PostList () {
             {/* Lista de posts */}
             <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
             {updatetPost.map((post) => (
-              <div className="relative flex flex-col my-6 bg-white shadow-md  rounded-lg w-64 h-96 transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-lg" key={post._id}>
+              <button className="relative flex flex-col my-6 bg-white shadow-md  rounded-lg w-64 h-96 transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-lg" key={post._id} type="button" onClick={() => handlerOnClick(post)}>
                 <div className="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
-                <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="card-image" />
+                  <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="card-image" />
                 </div>
                 <div className="p-4">
                   <h2 className="mb-2 text-slate-800 text-xl font-semibold">
@@ -175,15 +175,12 @@ export function PostList () {
                   </h2>
                   <h6 className='h6'>{post.area}</h6>
                   <p className="text-slate-500 leading-normal font-light">
-                    {limitText(post.content, 50)}
+                  {limitText(post.content, 50)}
                   </p>
                 </div>
                 <div className="px-4 pb-4 pt-0 mt-2">
-                  <button className="rounded-md bg-black py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-white hover:text-black active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button" onClick={() => handlerOnClick(post)}>
-                    Read more
-                  </button>
                 </div>
-              </div>
+              </button>
             ))}
             </div>
             <div className='flex self-center'>

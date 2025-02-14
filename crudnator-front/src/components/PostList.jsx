@@ -3,106 +3,113 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
 import api from '../services/api';
 import { useSelector, useDispatch } from 'react-redux';
-import { setError, setLoading, setPosts, setPost, setPage, setTotalPages } from '../store/Slices/PostsSlice';
+import { setError, setLoading, setPosts, setPost, setPage, setTotalPages, setFilter } from '../store/Slices/PostsSlice';
+import Pagination from '../components/pagination'; 
 
 
 
 export function PostList () {
   const router = useRouter();
-  const postsSelector = useSelector((state) => state.posts);
-  const dispatch = useDispatch();
-  const onError = (text) => dispatch(setError(text));
-  const onLoading = (boolean) => dispatch(setLoading(boolean));
-  const onFetch = (posts) => dispatch(setPosts(posts));
-  
-  const [updatetPost, setUpdate] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // Estado para a página atual
-  const [loadingMore, setLoadingMore] = useState(false); // Estado para controlar o carregamento adicional`
+    const postsSelector = useSelector((state) => state.posts);
+    const dispatch = useDispatch();
+    const onError = (text) => dispatch(setError(text));
+    const onLoading = (boolean) => dispatch(setLoading(boolean));
+    const onFetch = (posts) => dispatch(setPosts(posts));
+    const onFilter = (filter) => dispatch(setFilter(filter));
+    const onTotal = (totalPages) => dispatch(setTotalPages(totalPages));
+    const onCurrent = (currentPage) => dispatch(setPage(currentPage));
 
-  const fetchPosts = async (page = 1, totalPages) => {
-    try {
-      onLoading(true);
-      setLoadingMore(true);
+    const [updatetPost, setUpdate] = useState([]);
+    const [filterApplied, setFilterApplied] = useState(false);
 
-      const response = await api.get('/post', { params: { page, limit: totalPages } });
+    const fetchPosts = async (page = 1) => {
+        try {
+            onLoading(true);
 
-      const postsWithConvertedIds = response.data.posts.map((post) => ({
-        ...post,
-        _id: post._id.toString(),
-        author: post.author.toString()
-    }));
-      if (page === 1) { // Se for a primeira página, substitui os posts existentes
-          onFetch(postsWithConvertedIds);
-          setUpdate(postsWithConvertedIds);
-      } else { // Se for uma página adicional, adiciona aos posts existentes
-          onFetch([...postsSelector.posts, ...postsWithConvertedIds]);
-          setUpdate([...updatetPost, ...postsWithConvertedIds]);
+            const response = await api.get('/post', { params: { page } });
+
+            const postsWithConvertedIds = response.data.posts.map((post) => ({
+                ...post,
+                _id: post._id.toString(),
+                author: post.author.toString()
+            }));
+
+            console.log(response.data);
+            onFetch(postsWithConvertedIds);
+            setUpdate(postsWithConvertedIds);
+            onLoading(false);
+            onTotal(response.data.totalPages);
+            onCurrent(response.data.page);
+
+        } catch (err) {
+            console.error("Erro ao carregar posts:", err);
+            onError('Erro ao carregar os posts. Tente novamente mais tarde.');
+            onLoading(false);
+        }
+    };
+
+    const filterPosts = async (filter, page = 1) => {
+        onFilter(filter);
+        try {
+            onLoading(true);
+
+            const response = await api.get(`/post/filter/${filter}`, {
+                params: {
+                    page,
+                    limit: 10, // Mantém o limite de 10 posts por página
+                },
+            });
+
+            console.log(response.data);
+            
+
+            if (response.data.posts.length === 0) {
+                onError('Nenhum post encontrado com esse filtro.');
+            }
+
+            setUpdate(response.data.posts); // Atualiza updatetPost com os posts filtrados
+            onLoading(false);
+            onTotal(response.data.totalPages);
+            onCurrent(response.data.page);
+            setFilterApplied(true);
+
+        } catch (err) {
+            onError('Erro ao filtrar os posts. Tente novamente mais tarde.');
+            onLoading(false);
+        }
+    };
+
+    const handleFilter = async (filter) => {
+        setFilterApplied(true);
+        switch (filter) {
+            case 'Frontend':
+            case 'Backend':
+            case 'UX':
+                await filterPosts(filter); // Chama filterPosts diretamente
+                break;
+            case 'All':
+                setFilterApplied(false);
+                setUpdate(postsSelector.posts); // Restaura posts originais
+                onTotal(postsSelector.totalPages)
+                onCurrent(1)
+                break;
+            default:
+                console.log('Opção de filtro inválida');
+        }
+    };
+
+
+    const limitText = (text, maxLength) => {
+      if (text.length <= maxLength) {
+        return text;
       }
-      onLoading(false);
-      setLoadingMore(false); // Define loadingMore como false após o carregamento
-      dispatch(setTotalPages(response.data.totalPages));
-      dispatch(setPage(response.data.page));
-      setCurrentPage(page); // Atualiza a página atual
+      return text.substring(0, maxLength) + '...';
+    };
 
-    } catch (err) {
-        console.error("Erro ao carregar posts:", err);
-        onError('Erro ao carregar os posts. Tente novamente mais tarde.');
-        onLoading(false);
-        setLoadingMore(false); // Define loadingMore como false em caso de erro
-    }
-  };
-
-  const filterPosts = async (filter) => {
-    try{
-      onLoading(true);
-      setLoadingMore(true);
-
-      const response = await api.get(`/post/filter/${filter}`);
-      
-      if (response.length === 0) {
-      onError('Nenhum post encontrado com esse filtro.');
-      }
-      setUpdate(response.data.filteredPosts);
-      onLoading(false);
-    } catch (err) {
-      onError('Erro ao filtrar os posts. Tente novamente mais tarde.');
-    }
-  };
-
-  const handleFilter = async (filter) => {
-    switch (filter) {
-      case 'Frontend':
-         await filterPosts('Frontend')
-        console.log('Filtrando por Frontend');
-        break;
-      case 'Backend':
-        await filterPosts('Backend')
-        console.log('Filtrando por Backend');
-        break;
-      case 'All':
-        setUpdate(postsSelector.posts)
-        console.log('Mostrando todos os itens');
-        break;
-      case 'UX':
-        await filterPosts('UX')
-        console.log('Filtrando por UX');
-        break;
-      default:
-        console.log('Opção de filtro inválida');
-    }
-  }
-
-  const limitText = (text, maxLength) => {
-    if (text.length <= maxLength) {
-      return text;
-    }
-    return text.substring(0, maxLength) + '...';
-  };
-
-  const handlerOnClick = (post) => {
-    dispatch(setPost(post))
-    router.push(`/posts/${post._id}`)
-  };
+    const handlerOnClick = (post) => {
+      dispatch(setPost(post))
+      router.push(`/posts/${post._id}`)
+    };
 
   // useEffect para puxar todos os posts do db 
    useEffect(() => {
@@ -130,12 +137,15 @@ export function PostList () {
     //      }
     //  };
      fetchPosts(); // Chama a função assíncrona
-}, []);
+    }, []);
 
-  const handleLoadMore = () => {
-    fetchPosts(currentPage + 1);
+    const handleLoadMore = (page) => { // Aceita o número da página como argumento
+      if (filterApplied) {
+          filterPosts(postsSelector.filter, page); // Passa o número da página para filterPosts
+      } else {
+          fetchPosts(page); // Passa o número da página para fetchPosts
+      }
   };
-
     if (postsSelector.loading) {
       return (
        <div role="status">
@@ -195,16 +205,10 @@ export function PostList () {
               </div>
             ))}
             </div>
-            <div className='flex self-center'>
-                  <button
-                      className="rounded-md bg-black py-2 px-4 border self-center border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-white hover:text-black active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                      type="button"
-                      onClick={handleLoadMore}
-                      disabled={loadingMore || currentPage >= postsSelector.totalPages} // Desabilita o botão durante o carregamento ou se não houver mais páginas
-                  >
-                      {loadingMore ? "No more Posts!" : "More Posts..."} {/* Texto do botão condicional */}
-                  </button>
-            </div>
+            {/* Paginação */ }
+            <Pagination
+              onPageChange={handleLoadMore} // Use a função handleLoadMore para lidar com a troca de página
+            />
         </div>
   );
 };

@@ -1,6 +1,5 @@
 import PostList from "../components/PostList";
 import Image from "next/image";
-import hero from "../../public/CrudNatorGirl.png";
 
 export default function Home() {
   return (

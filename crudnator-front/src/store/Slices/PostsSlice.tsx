@@ -19,8 +19,8 @@ const PostsSlice = createSlice({
         post:{} as Post,
         error: null,
         loading: null,
-        selectedFilters: null,
         page: null,
+        filter: null,
         totalPages: null
     },
     reducers: {
@@ -33,20 +33,24 @@ const PostsSlice = createSlice({
         setError: (state, action) => {
             state.error = action.payload;
         },
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        },
         setPage: (state, action) => {
             state.page = action.payload;
+        },
+        setFilter: (state, action) => {
+            state.filter = action.payload;
         },
         setTotalPages: (state, action) => {
             state.totalPages = action.payload;
         },
-        setLoading: (state, action) => {
-            state.loading = action.payload;
-        },
+        
     },
 });
 
 
-export const { setPosts, setError, setLoading, setPost, setPage, setTotalPages } = PostsSlice.actions;
+export const { setPosts, setError, setLoading, setPost, setPage, setTotalPages, setFilter } = PostsSlice.actions;
 
 export default PostsSlice.reducer;
 export type PostsState = ReturnType<typeof PostsSlice.reducer>;

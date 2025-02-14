@@ -158,15 +158,15 @@ export function PostList () {
             {updatetPost.map((post) => (
              <button className="relative flex flex-col my-6 bg-white shadow-md  rounded-lg w-64 h-96 transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-lg" key={post._id} type="button" onClick={() => handlerOnClick(post)}>                <div className="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
               <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="card-image" />                </div>
-                <div className="p-4">
-                  <h2 className="mb-2 text-slate-800 text-xl font-semibold">
-                    {post.title}
-                  </h2>
-                  <h6 className='h6'>{post.area}</h6>
-                  <p className="text-slate-500 leading-normal font-light">
-                    {limitText(post.content, 50)}
-                  </p>
-                </div>
+              <div className="p-4 flex flex-col items-center text-center">
+                <h2 className="mb-2 text-slate-800 text-xl font-semibold min-h-[3rem] flex items-center justify-center">
+                  {limitText(post.title, 30)}
+                </h2>
+                <h6 className="h6">{post.area}</h6>
+                <p className="text-slate-500 leading-normal font-light">
+                  {limitText(post.content, 50)}
+                </p>
+              </div>
                 <div className="px-4 pb-4 pt-0 mt-2">
                 </div>
               </button>

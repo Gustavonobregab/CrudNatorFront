@@ -5,10 +5,6 @@ import { useSelector } from 'react-redux';
 
 const PostDetailsClient = () => {
     const { post } = useSelector((state: RootState) => state.posts);
-    console.log(post);
-    
-    
-
     return (
         <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
             

@@ -33,8 +33,6 @@ export function PostList () {
                 _id: post._id.toString(),
                 author: post.author.toString()
             }));
-
-            console.log(response.data);
             onFetch(postsWithConvertedIds);
             setUpdate(postsWithConvertedIds);
             onLoading(false);
@@ -59,10 +57,7 @@ export function PostList () {
                     limit: 10, // Mantém o limite de 10 posts por página
                 },
             });
-
-            console.log(response.data);
             
-
             if (response.data.posts.length === 0) {
                 onError('Nenhum post encontrado com esse filtro.');
             }

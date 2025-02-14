@@ -6,7 +6,7 @@ function Pagination({ onPageChange }) { // Recebe onPageChange como prop
     const postsSelector = useSelector((state) => state.posts);
     const dispatch = useDispatch(); // Inicializa o dispatch
 
-    const currentPage = postsSelector.page; // Obtém a página atual do Redux
+    const currentPage = Number(postsSelector.page); // Obtém a página atual do Redux
     const totalPages = postsSelector.totalPages; // Obtém o total de páginas do Redux
 
     const pageNumbers = [];
@@ -33,8 +33,8 @@ function Pagination({ onPageChange }) { // Recebe onPageChange como prop
             <ul className="pagination flex justify-center">
                 <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
                     <button
-                        className="page-link px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50"
-                        onClick={() => handlePageClick(currentPage - 1)} // Chama handlePageClick
+                        className="page-link px-3 py-2 ml-0 leading-tight text-black bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+                        onClick={() => handlePageClick(currentPage - 1)}
                         aria-label="Previous"
                         disabled={currentPage === 1}
                     >
@@ -44,10 +44,10 @@ function Pagination({ onPageChange }) { // Recebe onPageChange como prop
                 {pageNumbers.map((number) => (
                     <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
                         <button
-                            className={`page-link px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
-                                currentPage === number ? 'bg-blue-700 border-blue-700 text-white hover:bg-blue-700 hover:text-white dark:border-blue-500' : ''
+                            className={`page-link px-3 py-2 leading-tight border hover:bg-gray-100 hover:text-gray-700 ${
+                                currentPage === number ? 'bg-black text-white border-black' : 'text-black bg-white border-gray-300' // Estilos para a página ativa (fundo preto, texto branco no hover)
                             }`}
-                            onClick={() => handlePageClick(number)} // Chama handlePageClick
+                            onClick={() => handlePageClick(number)}
                         >
                             {number}
                         </button>
@@ -55,8 +55,8 @@ function Pagination({ onPageChange }) { // Recebe onPageChange como prop
                 ))}
                 <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                     <button
-                        className="page-link px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:opacity-50"
-                        onClick={() => handlePageClick(currentPage + 1)} // Chama handlePageClick
+                        className="page-link px-3 py-2 leading-tight text-black bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50"
+                        onClick={() => handlePageClick(currentPage + 1)}
                         aria-label="Next"
                         disabled={currentPage === totalPages}
                     >

@@ -111,6 +111,10 @@ export function PostList () {
       fetchPosts(); // Chama a função assíncrona
     }, []);
 
+    const capitalizeFirstLetter = (string) => {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    };
+
     const handleLoadMore = (page) => { // Aceita o número da página como argumento
       if (filterApplied) {
           filterPosts(postsSelector.filter, page); // Passa o número da página para filterPosts
@@ -160,8 +164,8 @@ export function PostList () {
               <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="card-image" />                </div>
               <div className="p-4 flex flex-col items-center text-center">
                 <h2 className="mb-2 text-slate-800 text-xl font-semibold min-h-[3rem] flex items-center justify-center">
-                  {limitText(post.title, 30)}
-                </h2>
+  {capitalizeFirstLetter(limitText(post.title, 30))}
+</h2>
                 <h6 className="h6">{post.area}</h6>
                 <p className="text-slate-500 leading-normal font-light">
                   {limitText(post.content, 50)}

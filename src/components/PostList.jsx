@@ -26,7 +26,10 @@ export function PostList () {
         try {
             onLoading(true);
 
-            const response = await api.get('/post', { params: { page } });
+            const response = await api.get('/post', {  params: {
+              page,
+              limit: 20, // Mantém o limite de 20 posts por página
+          }, });
 
             const postsWithConvertedIds = response.data.posts.map((post) => ({
                 ...post,
@@ -54,7 +57,7 @@ export function PostList () {
             const response = await api.get(`/post/filter/${filter}`, {
                 params: {
                     page,
-                    limit: 10, // Mantém o limite de 10 posts por página
+                    limit: 20, // Mantém o limite de 10 posts por página
                 },
             });
             

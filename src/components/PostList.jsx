@@ -20,6 +20,7 @@ export function PostList () {
     const onCurrent = (currentPage) => dispatch(setPage(currentPage));
 
     const [updatetPost, setUpdate] = useState([]);
+    const [allPAges, setAllpages] = useState(1);
     const [filterApplied, setFilterApplied] = useState(false);
 
     const fetchPosts = async (page = 1) => {
@@ -36,10 +37,13 @@ export function PostList () {
                 _id: post._id.toString(),
                 author: post.author.toString()
             }));
+            console.log(response.data);
+            
             onFetch(postsWithConvertedIds);
             setUpdate(postsWithConvertedIds);
             onLoading(false);
             onTotal(response.data.totalPages);
+            setAllpages(response.data.totalPages);
             onCurrent(response.data.page);
 
         } catch (err) {
@@ -64,7 +68,6 @@ export function PostList () {
             if (response.data.posts.length === 0) {
                 onError('Nenhum post encontrado com esse filtro.');
             }
-
             setUpdate(response.data.posts); // Atualiza updatetPost com os posts filtrados
             onLoading(false);
             onTotal(response.data.totalPages);
@@ -78,18 +81,24 @@ export function PostList () {
     };
 
     const handleFilter = async (filter) => {
+      console.log(postsSelector.totalPages);
+      
         setFilterApplied(true);
         switch (filter) {
             case 'Frontend':
+              await filterPosts(filter); // Chama filterPosts diretamente
+                break;
             case 'Backend':
-            case 'UX':
+              await filterPosts(filter); // Chama filterPosts diretamente
+                break;
+            case 'Ux':
                 await filterPosts(filter); // Chama filterPosts diretamente
                 break;
             case 'All':
                 setFilterApplied(false);
                 setUpdate(postsSelector.posts); // Restaura posts originais
-                onTotal(postsSelector.totalPages)
-                onCurrent(1)
+                onTotal(allPAges); // Redefinir totalPages!
+                onCurrent(1); // E a página atual
                 break;
             default:
                 console.log('Opção de filtro inválida');
@@ -156,7 +165,7 @@ export function PostList () {
               <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Backend')}>
                 Back-end
               </div>
-              <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Uxui')}>
+              <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Ux')}>
                 UX/UI
               </div>
             </div>
@@ -167,8 +176,8 @@ export function PostList () {
               <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="card-image" />                </div>
               <div className="p-4 flex flex-col items-center text-center">
                 <h2 className="mb-2 text-slate-800 text-xl font-semibold min-h-[3rem] flex items-center justify-center">
-  {capitalizeFirstLetter(limitText(post.title, 30))}
-</h2>
+                  {capitalizeFirstLetter(limitText(post.title, 30))}
+                </h2>
                 <h6 className="h6">{post.area}</h6>
                 <p className="text-slate-500 leading-normal font-light">
                   {limitText(post.content, 50)}

@@ -165,9 +165,6 @@ export function PostList () {
               <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Backend')}>
                 Back-end
               </div>
-              <div className="px-2 cursor-pointer self-center border-l text-slate-500 hover:text-slate-900" onClick={() => handleFilter('Ux')}>
-                UX/UI
-              </div>
             </div>
             {/* Lista de posts */}
             <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">

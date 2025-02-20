@@ -167,7 +167,7 @@ export function PostList () {
               </div>
             </div>
             {/* Lista de posts */}
-            <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
+            <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)] max-w-[1650px]">
             {updatetPost.map((post) => (
              <button className="relative flex flex-col my-6 bg-white shadow-md  rounded-lg w-64 h-96 transition duration-300 ease-in-out transform hover:-translate-y-2 hover:shadow-lg" key={post._id} type="button" onClick={() => handlerOnClick(post)}>                <div className="relative h-56 m-2.5 overflow-hidden text-white rounded-md">
               <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="card-image" />                </div>

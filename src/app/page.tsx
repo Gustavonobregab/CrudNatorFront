@@ -4,14 +4,14 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="relative grid items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] overflow-hidden">
-      {/* Imagem no canto superior direito */}
+      {/* Imagem no canto superior direito
       <Image
         src="/CrudNatorGirl.png"
         alt="Descrição da imagem"
         width={500}
         height={300}
         className="absolute -top-24 -right-24 w-80 h-[400px] sm:w-96 sm:h-[500px] transform rotate-[240deg]"
-      />
+      />  */}
 
       <main className="container mx-auto">
         <section className="flex flex-col place-items-center">

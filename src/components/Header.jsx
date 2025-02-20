@@ -1,17 +1,21 @@
 'use client'
 import {React} from 'react';
 import { useRouter } from 'next/navigation';
-import { FaUser, FaSearch, FaHome, FaPlus } from 'react-icons/fa';
+import { FaUser, FaHome, FaPlus } from 'react-icons/fa';
 import { Menu, MenuButton, MenuItem, MenuItems, Legend } from '@headlessui/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleModal } from '../store/Slices/HeaderSlice';
+import { logout } from '../store/Slices/HeaderSlice';
+import { setLogon } from '../store/Slices/LoginSlice';
 
 const Navbar = () => {
   const router = useRouter();
-  const { hasUser, user, modal} = useSelector((state) => state.header);
+  const { hasUser, user } = useSelector((state) => state.header);
   const dispatch = useDispatch();
 
-  const handlerModal = () => { dispatch(toggleModal()) };
+  const onLogout = () => {
+    dispatch(logout());
+    dispatch(setLogon());
+  };
 
   const profileDropdow = ( 
     <Menu as="div" className="relative inline-block text-left">
@@ -28,12 +32,12 @@ const Navbar = () => {
         <div className="py-1">
           <MenuItem>
             <Legend className="block px-4 py-2 text-sm text-gray-700">
-            Signed in as {user.name}
+            Signed in as {user}
             </Legend>
           </MenuItem>
           <MenuItem>
             <a
-              href="/profile"
+              onClick={() => router.push('/profile')}
               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
             >
               Account settings
@@ -43,7 +47,7 @@ const Navbar = () => {
             <MenuItem>
               <button
                 type="submit"
-                // onClick={logout()}
+                onClick={onLogout}
                 className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
               >
                 Sign out

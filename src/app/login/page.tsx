@@ -2,18 +2,27 @@
  
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import api from '../../services/api';
+import { useDispatch } from 'react-redux';
+import { login} from '../../store/Slices/HeaderSlice';
+import { setLogin} from '../../store/Slices/LoginSlice';
+
+
+interface User {
+  email: string;
+  token: string;
+}
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const dispatch = useDispatch();
+  const onLogin  = (user: User) => {
+    dispatch(login(user.email));
+    dispatch(setLogin({token: user.token, email: user.email}));
+  }
   const router = useRouter();
-
-  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    console.log('Email:', email);
-    console.log('Password:', password);
-  };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -21,6 +30,17 @@ export default function Login() {
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
+  };
+
+  const loginHandler = async () => {
+    try {
+      const response = await api.post('users/login', { email, password});
+      onLogin({token: response.data.token, email});
+      router.push('/');
+
+    } catch (error) {
+      console.error(error);
+    }
   };
     return (
       <div className="flex justify-evenly flex-col items-center h-screen">
@@ -44,7 +64,7 @@ export default function Login() {
             <a href="#" className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Esqueceu a senha?</a>
           </div>
           <div className="grid gap-1 w-full">
-            <button type="submit" className="text-white bg-black hover:bg-slate-300 hover:text-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={handleSubmit}>Entrar</button>
+            <button type="button" className="text-white bg-black hover:bg-slate-300 hover:text-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={loginHandler}>Entrar</button>
             <button type="submit" className="text-white bg-black hover:bg-slate-300 hover:text-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={() => router.push('/singUp')}>Criar conta</button>        
           </div>
         </form>

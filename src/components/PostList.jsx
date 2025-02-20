@@ -37,8 +37,6 @@ export function PostList () {
                 _id: post._id.toString(),
                 author: post.author.toString()
             }));
-            console.log(response.data);
-            
             onFetch(postsWithConvertedIds);
             setUpdate(postsWithConvertedIds);
             onLoading(false);

@@ -1,12 +1,11 @@
 'use client'
- 
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import api from '../../services/api';
 import { useDispatch } from 'react-redux';
-import { login} from '../../store/Slices/HeaderSlice';
-import { setLogin} from '../../store/Slices/LoginSlice';
-
+import { login } from '../../store/Slices/HeaderSlice';
+import { setLogin } from '../../store/Slices/LoginSlice';
 
 interface User {
   email: string;
@@ -18,9 +17,9 @@ export default function Login() {
   const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
-  const onLogin  = (user: User) => {
+  const onLogin = (user: User) => {
     dispatch(login(user.email));
-    dispatch(setLogin({token: user.token, email: user.email}));
+    dispatch(setLogin({ token: user.token, email: user.email }));
   }
   const router = useRouter();
 
@@ -34,40 +33,57 @@ export default function Login() {
 
   const loginHandler = async () => {
     try {
-      const response = await api.post('users/login', { email, password});
-      onLogin({token: response.data.token, email});
+      const response = await api.post('users/login', { email, password });
+      onLogin({ token: response.data.token, email });
       router.push('/');
-
     } catch (error) {
       console.error(error);
     }
   };
-    return (
-      <div className="flex justify-evenly flex-col items-center h-screen">
-        <h1 className="text-4xl font-extrabold leading-none tracking-tight text-gray-900 pb-2">Sign in!</h1>
-        <form className="flex flex-col items-center min-w-80">
-          <div className="mb-5">
-            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-            <input type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="seuEmail@gmail.com" required onChange={handleEmailChange} />
+
+  return (
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="bg-white p-12 rounded-2xl shadow-lg w-96">
+        <h1 className="text-3xl font-extrabold text-center mb-12">SignUp</h1>
+        <form className="space-y-4"> {/* Diminui o espaçamento entre os campos */}
+          <input 
+            type="text" 
+            placeholder="Username" 
+            className="w-full py-2 px-4 border border-gray-300 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input 
+            type="email" 
+            placeholder="Email" 
+            className="w-full py-2 px-4 border border-gray-300 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={handleEmailChange}
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            className="w-full py-2 px-4 border border-gray-300 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={handlePasswordChange}
+          />
+          <div className="flex items-center space-x-2 block">
+            <input id="terms" type="checkbox" className="w-4 h-4 mb-7" />
+            <label htmlFor="terms" className="text-sm text-gray-600 mb-7">Accept terms</label>
           </div>
-          <div className="mb-5">
-            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Senha</label>
-            <input type="password" autoComplete="Password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required onChange={handlePasswordChange} />
-          </div>
-          <div className="flex items-start mb-5">
-            <div className="flex items-center h-5">
-              <input id="remember" type="checkbox" value="" className="w-4 h-4 border cursor-pointer border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
-            </div>
-            <label htmlFor="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Lembrar-se</label>
-          </div>
-          <div className="flex items-center justify-between mb-5">
-            <a href="#" className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Esqueceu a senha?</a>
-          </div>
-          <div className="grid gap-1 w-full">
-            <button type="button" className="text-white bg-black hover:bg-slate-300 hover:text-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={loginHandler}>Entrar</button>
-            <button type="submit" className="text-white bg-black hover:bg-slate-300 hover:text-black focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={() => router.push('/singUp')}>Criar conta</button>        
+          <div className="flex justify-between space-x-2">
+            <button 
+              type="button" 
+              className="w-1/2 bg-red-400 text-white py-2 rounded-2xl shadow-lg hover:bg-red-500"
+            >
+              Clear
+            </button>
+            <button 
+              type="button" 
+              className="w-1/2 bg-green-400 text-white py-2 rounded-2xl shadow-lg hover:bg-green-500"
+              onClick={loginHandler}
+            >
+              SignUp
+            </button>
           </div>
         </form>
       </div>
-    );
-  }
+    </div>
+  );
+}

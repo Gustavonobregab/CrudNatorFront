@@ -1,28 +1,36 @@
-'use client'; // Importante: Este é um Client Component
+'use client';
+
 import { RootState } from '../../../store/index';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
 const PostDetailsClient = () => {
     const { post } = useSelector((state: RootState) => state.posts);
+    
     return (
-        <div className="flex flex-wrap justify-center items-start gap-5 p-5 flex-grow min-h-[calc(100vh-100px)]">
-            
-                 <div className="rounded-md">
-                    <img src="https://images.unsplash.com/photo-1540553016722-983e48a2cd10?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="card-image" />
+        <div className="flex justify-center items-center min-h-screen bg-gray-100 p-5 sm:p-3">
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg w-full max-w-3xl sm:max-w-2xl h-[80vh] sm:h-[70vh] flex flex-col">
+                
+                {/* Imagem responsiva */}
+                <div className="mb-4 rounded-2xl overflow-hidden shadow-lg w-full max-w-md aspect-[5/3] mx-auto">
+                    <img 
+                        src="/pyimage.jpg" 
+                        alt="post-image" 
+                        className="w-full h-full object-cover"
+                    />
                 </div>
-                <div className="p-4">
-                    <h2 className="mb-2 text-slate-800 text-xl font-semibold">
-                    {post.title}
-                    </h2>
-                    <h6 className='h6'>{post.area}</h6>
-                    <p className="text-slate-500 leading-normal font-light">
-                    {post.content}
+
+                {/* Conteúdo do post sem limite de palavras */}
+                <div className="flex-1 flex flex-col justify-start text-center px-4 overflow-auto">
+                    <h2 className="text-3xl sm:text-2xl font-extrabold text-gray-800 mb-2">{post.title}</h2>
+                    <h6 className="text-lg sm:text-base text-gray-600 font-medium mb-2">{post.area}</h6>
+                    <p className="text-gray-500 leading-relaxed text-base sm:text-sm">
+                        {post.content}
                     </p>
-                </div> 
+                </div>
             </div>
+        </div>
     );
 };
-
 
 export default PostDetailsClient;

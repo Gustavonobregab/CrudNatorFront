@@ -6,6 +6,7 @@ import api from '../../services/api';
 import { useDispatch } from 'react-redux';
 import { login } from '../../store/Slices/HeaderSlice';
 import { setLogin } from '../../store/Slices/LoginSlice';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 interface User {
   email: string;
@@ -15,6 +16,7 @@ interface User {
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
   const onLogin = (user: User) => {
@@ -31,6 +33,10 @@ export default function Login() {
     setPassword(event.target.value);
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const loginHandler = async () => {
     try {
       const response = await api.post('users/login', { email, password });
@@ -44,42 +50,48 @@ export default function Login() {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-12 rounded-2xl shadow-lg w-96">
-        <h1 className="text-3xl font-extrabold text-center mb-12">SignUp</h1>
+        <h1 className="text-3xl font-extrabold text-center mb-12">Login</h1>
         <form className="space-y-4"> {/* Diminui o espaçamento entre os campos */}
-          <input 
-            type="text" 
-            placeholder="Username" 
-            className="w-full py-2 px-4 border border-gray-300 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
           <input 
             type="email" 
             placeholder="Email" 
             className="w-full py-2 px-4 border border-gray-300 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             onChange={handleEmailChange}
           />
-          <input 
-            type="password" 
-            placeholder="Password" 
-            className="w-full py-2 px-4 border border-gray-300 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onChange={handlePasswordChange}
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              autoComplete="on"
+              className="w-full py-2 px-4 border border-gray-300 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" 
+              onChange={handlePasswordChange}
+              value={password}
+            />
+            <span
+              className="absolute inset-y-0 right-0 flex items-center px-3 cursor-pointer"
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
           <div className="flex items-center space-x-2 block">
             <input id="terms" type="checkbox" className="w-4 h-4 mb-7" />
-            <label htmlFor="terms" className="text-sm text-gray-600 mb-7">Accept terms</label>
+            <label htmlFor="terms" className="text-sm text-gray-600 mb-7">Remember-me</label>
           </div>
           <div className="flex justify-between space-x-2">
             <button 
               type="button" 
-              className="w-1/2 bg-red-400 text-white py-2 rounded-2xl shadow-lg hover:bg-red-500"
+              className="w-1/2 bg-yellow-200 text-black py-2 rounded-2xl shadow-lg hover:bg-yellow-300"
+              onClick={() => router.push('/singUp')}
             >
-              Clear
+              SingUp
             </button>
             <button 
               type="button" 
-              className="w-1/2 bg-green-400 text-white py-2 rounded-2xl shadow-lg hover:bg-green-500"
+              className="w-1/2 bg-green-400 text-black py-2 rounded-2xl shadow-lg hover:bg-green-500"
               onClick={loginHandler}
             >
-              SignUp
+              Login
             </button>
           </div>
         </form>

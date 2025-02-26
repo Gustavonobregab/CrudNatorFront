@@ -1,3 +1,4 @@
+'use client'
 import { ChevronDownIcon } from '@heroicons/react/16/solid';
 import { useState } from 'react';
 
@@ -10,13 +11,13 @@ export default function Posts() {
   const [content, setContent] = useState('');
 
   const handleSubmit = () => {
-    const data = {
-      author,
-      title,
-      postLink,
-      area,
-      content,
-    };
+    // const data = {
+    //   author,
+    //   title,
+    //   postLink,
+    //   area,
+    //   content,
+    // };
     
   };
     return (

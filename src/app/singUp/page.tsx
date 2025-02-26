@@ -64,16 +64,13 @@ export default function SignUp() {
 
     setErrors(newErrors);
 
-    console.log(typeof(password))
-
     if (Object.keys(newErrors).length === 0) {
       try {
-        const response = await api.post('users/singUp', {
+        const response = await api.post('users/signUp', {
           username, email, password, description
         });
         console.log('Resposta da API:', response.data);
-        // Redirecionar ou fazer algo após o cadastro bem-sucedido
-        //router.push('/login');  redireciona para a página de login
+        router.push('/login');
       } catch (error: any) {
         console.error('Erro no cadastro:', error.response?.data || error.message);
         // Lidar com erros de cadastro (exibir mensagens de erro, etc.)

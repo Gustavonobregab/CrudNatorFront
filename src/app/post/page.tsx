@@ -1,21 +1,59 @@
 'use client'
 import { ChevronDownIcon } from '@heroicons/react/16/solid';
 import { jwtDecode } from "jwt-decode";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import api from '../../services/api';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/index';
 
+interface MyJwtPayload {
+  id: string;
+  exp?: number;
+  iat?: number;
+  sub?: string;
+}
+
+const validateFields = (title: string, link: string, content: string): string | null => {
+  if (!title.trim()) {
+    return 'O título é obrigatório.';
+  }
+  if (!link.trim()) {
+    return 'O link é obrigatório.';
+  }
+  if (!content.trim()) {
+    return 'O conteúdo é obrigatório.';
+  }
+  return null;
+};
+
 
 export default function Posts() {
   const [title, setTitle] = useState('');
+  const [titleError, setTitleError] = useState(false);
   const [link, setpostLink] = useState('');
+  const [linkError, setLinkError] = useState(false);
   const [area, setArea] = useState('Frontend');
   const [content, setContent] = useState('');
+  const [contentError, setContentError] = useState(false);
   const {user}  = useSelector((state: RootState) => state.Login);
 
+  const validateFields = () => {
+    setTitleError(!title.trim());
+    setLinkError(!link.trim());
+    setContentError(!content.trim());
+    return !title.trim() || !link.trim() || !content.trim();
+  
+  }
+
   const handleSubmit = async () => {
-    const decoded = jwtDecode(user.token);
+
+    validateFields();
+
+    if (titleError || linkError || contentError) {
+      return null;
+    }
+
+    const decoded = jwtDecode<MyJwtPayload>(user.token);
     console.log(decoded);
     
     try {
@@ -61,10 +99,12 @@ export default function Posts() {
                         placeholder="Post title"
                         className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
                         onChange={(e) => setTitle(e.target.value)}
+                        required
                         value={title}
                       />
                     </div>
                   </div>
+                  {titleError && <p className="text-red-500 text-sm mt-1">O título é obrigatório.</p>}
                 </div>
 
                 <div className="sm:col-span-4">
@@ -81,10 +121,12 @@ export default function Posts() {
                         placeholder="postLink"
                         className="block min-w-0 grow py-1.5 pl-1 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
                         onChange={(e) => setpostLink(e.target.value)}
+                        required
                         value={link}
                       />
                     </div>
                   </div>
+                  {linkError && <p className="text-red-500 text-sm mt-1">O link é obrigatório.</p>}
                 </div>
 
                 <div className="sm:col-span-3">
@@ -124,11 +166,13 @@ export default function Posts() {
                       rows={3}
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                       onChange={(e) => setContent(e.target.value)}
+                      required
                       value={content}
                     />
                   </div>
                   <p className="mt-3 text-sm/6 text-gray-600">Write a few sentences about the project.</p>
                 </div>
+                {contentError && <p className="text-red-500 text-sm mt-1">O conteúdo é obrigatório.</p>}
               </div>
             </div>
             </div>

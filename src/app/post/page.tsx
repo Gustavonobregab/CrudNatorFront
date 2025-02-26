@@ -42,15 +42,12 @@ export default function Posts() {
     setLinkError(!link.trim());
     setContentError(!content.trim());
     return !title.trim() || !link.trim() || !content.trim();
-  
-  }
+  };
 
   const handleSubmit = async () => {
 
-    validateFields();
-
-    if (titleError || linkError || contentError) {
-      return null;
+    if (validateFields()) {
+      return;
     }
 
     const decoded = jwtDecode<MyJwtPayload>(user.token);
@@ -71,6 +68,8 @@ export default function Posts() {
     }
     
   };
+
+
     return (
       <div className="flex flex-wrap justify-center gap-10 p-5 flex-grow min-h-[calc(100vh-100px)]">
        <main className="container mx-auto">

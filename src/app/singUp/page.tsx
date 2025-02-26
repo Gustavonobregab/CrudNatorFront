@@ -86,7 +86,7 @@ export default function SignUp() {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-12 rounded-2xl shadow-lg w-96">
-        <h1 className="text-3xl font-extrabold text-center mb-12">SingUp</h1>
+        <h1 className="text-3xl font-extrabold text-center mb-12">SignUp</h1>
         <form className="space-y-4">
           <input 
             type="text" 

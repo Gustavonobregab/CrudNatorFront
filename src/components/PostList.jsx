@@ -113,7 +113,7 @@ export function PostList () {
 
     const handlerOnClick = (post) => {
       dispatch(setPost(post))
-      router.push(`/posts/${post._id}`)
+      router.push(`/post/${post._id}`)
     };
 
   // useEffect para puxar todos os posts do db 

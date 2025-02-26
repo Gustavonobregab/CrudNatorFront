@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface HeaderStateType {
   hasUser: boolean;
-  user: string;
+  userEmail: string;
 }
 
 const initialState: HeaderStateType = {
   hasUser: false,
-  user: '',
+  userEmail: '',
 };
 
 const HeaderSlice = createSlice({
@@ -16,11 +16,11 @@ const HeaderSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<string>) => {
       state.hasUser = true;
-      state.user = action.payload;
+      state.userEmail = action.payload;
     },
     logout: (state) => {
       state.hasUser = false;
-      state.user = initialState.user;
+      state.userEmail = initialState.userEmail;
     },
   },
 });

@@ -1,16 +1,26 @@
 'use client'
-import {React} from 'react';
+import {React, useState} from 'react';
 import { useRouter } from 'next/navigation';
 import { FaUser, FaHome, FaPlus } from 'react-icons/fa';
 import { Menu, MenuButton, MenuItem, MenuItems, Legend } from '@headlessui/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../store/Slices/HeaderSlice';
-import { setLogon } from '../store/Slices/LoginSlice';
 
 const Navbar = () => {
   const router = useRouter();
-  const { hasUser, user } = useSelector((state) => state.header);
+  const { hasUser, userEmail } = useSelector((state) => state.header);
+  const [hasAlert, setAlert] = useState(false);
+  const {isLogin, user} = useSelector((state) => state.Login);
   const dispatch = useDispatch();
+
+  const handleAlert = () => {
+    setAlert(!hasAlert);
+  };
+
+  const handleAlertLogin = () => {
+    setAlert(!hasAlert);
+    router.push('/login');
+  };
 
   const onLogout = () => {
     dispatch(logout());
@@ -32,7 +42,7 @@ const Navbar = () => {
         <div className="py-1">
           <MenuItem>
             <Legend className="block px-4 py-2 text-sm text-gray-700">
-            Signed in as {user}
+            Signed in as {userEmail}
             </Legend>
           </MenuItem>
           <MenuItem>
@@ -77,30 +87,38 @@ const Navbar = () => {
             <FaUser className="text-lg" />
           </button>
         )}
-        {/* Ícone de pesquisa 
-        <div>
-          <button onClick={() => handlerModal()} className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100">
-            <FaSearch className="text-lg" />
-          </button>
-          {modal && (
-            <div className="fixed left-14">
-              <div className="bg-white p-6 rounded-md shadow-md flex flex-col">
-                <input type="text" placeholder="Pesquisar" className="w-full self-center p-2" />
+        {/* Ícone de Criar post*/}
+        {isLogin ?  <button
+          onClick={() => router.push('/post')}
+          className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100">
+          <FaPlus className="text-lg" />
+        </button> : <button
+          onClick={handleAlert}
+          className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100">
+          <FaPlus className="text-lg" />
+        </button> }
+
+        {hasAlert && (
+          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white p-8 rounded-lg shadow-lg">
+              <p className="text-lg font-semibold mb-4">Você precisa estar logado para criar um post.</p>
+              <div className="flex justify-end">
                 <button
-                    className="text-white bg-black hover:bg-slate-300 hover:text-black font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center m-3"
-                    onClick={() => handlerModal()}>
-                    Search
+                  onClick={handleAlert}
+                  className="w-1/2 bg-red-300 text-white py-2 mr-2 rounded-2xl shadow-lg hover:bg-red-400"
+                >
+                  Fechar
+                </button>
+                <button
+                  onClick={handleAlertLogin}
+                  className="w-1/2 bg-green-300 text-black py-2 rounded-2xl shadow-lg hover:bg-green-400"
+                >
+                  Login
                 </button>
               </div>
             </div>
-          )}
-        </div>*/}
-        {/* Ícone de Criar post*/}
-        <button
-          onClick={() => router.push('/posts')}
-          className="px-2 bg-transparent text-gray-800 border-none rounded-full cursor-pointer text-2xl transition duration-300 ease-in-out hover:bg-gray-100">
-          <FaPlus className="text-lg" />
-        </button>
+          </div>
+        )}
       </div>
     </header> 
   );

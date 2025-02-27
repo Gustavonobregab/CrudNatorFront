@@ -5,6 +5,7 @@ import { useState } from 'react';
 import api from '../../services/api';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/index';
+import BackButton from '@/components/BackButton';
 
 interface MyJwtPayload {
   id: string;
@@ -12,19 +13,6 @@ interface MyJwtPayload {
   iat?: number;
   sub?: string;
 }
-
-const validateFields = (title: string, link: string, content: string): string | null => {
-  if (!title.trim()) {
-    return 'O título é obrigatório.';
-  }
-  if (!link.trim()) {
-    return 'O link é obrigatório.';
-  }
-  if (!content.trim()) {
-    return 'O conteúdo é obrigatório.';
-  }
-  return null;
-};
 
 
 export default function Posts() {
@@ -46,12 +34,8 @@ export default function Posts() {
 
   const handleSubmit = async () => {
 
-    if (validateFields()) {
-      return;
-    }
-
+    if (validateFields()) return;
     const decoded = jwtDecode<MyJwtPayload>(user.token);
-    console.log(decoded);
     
     try {
       const response =  await api.post(`post/createPost/${decoded.id}`,{
@@ -62,7 +46,7 @@ export default function Posts() {
         link:`https://github.com/${link}`
       });
 
-      console.log('Formulário enviado com sucesso!', response.data);
+      console.log('Formulário enviado com sucesso!');
     } catch (error) {
       console.error('Erro ao enviar o formulário:', error);
     }
@@ -72,6 +56,7 @@ export default function Posts() {
 
     return (
       <div className="flex flex-wrap justify-center gap-10 p-5 flex-grow min-h-[calc(100vh-100px)]">
+        <BackButton/>
        <main className="container mx-auto">
         <section className="flex flex-col place-items-center">
           <h1 className="grow text-4xl font-extrabold leading-none tracking-tight text-gray-900 pb-2">Let`s create a post!</h1>

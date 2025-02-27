@@ -38,20 +38,18 @@ export default function Home() {
       </main>
       <PostList />
     
-{/* Imagem clicável como botão fixo no canto inferior direito */}
-<div className="fixed bottom-10 right-10">
-  <a href="https://wa.me/55XXXXXXXXXXX" target="_blank" rel="noopener noreferrer">
-    <Image 
-      src="/whatsapp.png" 
-      alt="WhatsApp Logo" 
-      width={54}  
-      height={54} 
-      className="cursor-pointer" 
-    />
-  </a>
-</div>
+      {/* Imagem clicável como botão fixo no canto inferior direito */}
+      <div className="fixed bottom-10 right-10">
+        <a href="https://wa.me/55XXXXXXXXXXX" target="_blank" rel="noopener noreferrer">
+          <Image 
+            src="/whatsapp.png" 
+            alt="WhatsApp Logo" 
+            width={54}  
+            height={54} 
+            className="cursor-pointer" 
+          />
+        </a>
+      </div>
     </div>
-
-    
   );
 }

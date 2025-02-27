@@ -3,12 +3,14 @@
 import { RootState } from '../../../store/index';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import BackButton from '../../../components/BackButton';
 
 const PostDetailsClient = () => {
     const { post } = useSelector((state: RootState) => state.posts);
     
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100 p-5 sm:p-3">
+            <BackButton />
             <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-lg w-full max-w-3xl sm:max-w-2xl h-[80vh] sm:h-[70vh] flex flex-col">
                 
                 {/* Imagem responsiva */}

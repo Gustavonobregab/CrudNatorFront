@@ -10,7 +10,7 @@ const Navbar = () => {
   const router = useRouter();
   const { hasUser, userEmail } = useSelector((state) => state.header);
   const [hasAlert, setAlert] = useState(false);
-  const {isLogin, user} = useSelector((state) => state.Login);
+  const {isLogin} = useSelector((state) => state.Login);
   const dispatch = useDispatch();
 
   const handleAlert = () => {

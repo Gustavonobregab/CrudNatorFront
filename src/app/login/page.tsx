@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { login } from '../../store/Slices/HeaderSlice';
 import { setLogin } from '../../store/Slices/LoginSlice';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import BackButton from "@/components/BackButton";
 
 interface User {
   email: string;
@@ -49,6 +50,7 @@ export default function Login() {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
+      <BackButton/>
       <div className="bg-white p-12 rounded-2xl shadow-lg w-96">
         <h1 className="text-3xl font-extrabold text-center mb-12">Login</h1>
         <form className="space-y-4"> {/* Diminui o espaçamento entre os campos */}
